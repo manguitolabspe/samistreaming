@@ -6,7 +6,12 @@ export interface InquiryItem {
   productId: string;
   productName: string;
   planName: string;
-  price: number;
+  price: number | null;
+}
+
+export function formatPrice(amount: number | null): string {
+  if (amount === null) return 'Consultar';
+  return Number.isInteger(amount) ? `S/ ${amount}.00` : `S/ ${amount.toFixed(2)}`;
 }
 
 export function buildWhatsAppUrl(message: string): string {
@@ -18,9 +23,14 @@ export function buildProductWhatsAppUrl(
   planName?: string,
   priceFormatted?: string
 ): string {
-  if (planName && priceFormatted) {
+  if (planName && priceFormatted && priceFormatted !== 'Consultar') {
     return buildWhatsAppUrl(
       `Hola, Sami Streaming. Estoy interesado en ${productName} — ${planName} (${priceFormatted}). Quisiera conocer su disponibilidad y cómo puedo adquirirlo.`
+    );
+  }
+  if (planName) {
+    return buildWhatsAppUrl(
+      `Hola, Sami Streaming. Estoy interesado en ${productName} — ${planName}. Quisiera conocer su disponibilidad, precio y cómo puedo adquirirlo.`
     );
   }
   return buildWhatsAppUrl(
@@ -39,9 +49,16 @@ export function buildMultiInquiryWhatsAppUrl(items: InquiryItem[]): string {
   const lines = items.map(
     (item) => `• ${item.productName} (${item.planName} — ${formatPrice(item.price)})`
   );
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  const pricedTotal = items.reduce((sum, item) => sum + (item.price ?? 0), 0);
+  const hasConsult = items.some((item) => item.price === null);
+  const totalLine = hasConsult
+    ? pricedTotal > 0
+      ? `Total referencial: ${formatPrice(pricedTotal)} (+ servicios por consultar)`
+      : 'Precios sujetos a cotización por WhatsApp'
+    : `Total referencial: ${formatPrice(pricedTotal)}`;
+
   return buildWhatsAppUrl(
-    `Hola, Sami Streaming. Quisiera consultar disponibilidad y cómo adquirir los siguientes servicios:\n${lines.join('\n')}\nTotal referencial: ${formatPrice(total)}`
+    `Hola, Sami Streaming. Quisiera consultar disponibilidad y cómo adquirir los siguientes servicios:\n${lines.join('\n')}\n${totalLine}`
   );
 }
 
@@ -76,10 +93,6 @@ export function buildVipWhatsAppUrl(levelName?: string): string {
   return buildWhatsAppUrl(
     'Hola, Sami Streaming. Estoy interesado en formar parte de Sami VIP y quisiera conocer los requisitos, precios y beneficios para revendedores.'
   );
-}
-
-export function formatPrice(amount: number): string {
-  return `S/ ${amount.toFixed(2)}`;
 }
 
 export async function shareOrCopyLink(params: {

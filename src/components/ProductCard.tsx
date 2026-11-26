@@ -28,7 +28,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const inquiryKey = `${product.id}::${defaultPlan ? defaultPlan.id : 'base'}`;
 
   const savings =
-    product.previousPrice && product.previousPrice > product.price
+    product.price !== null &&
+    product.previousPrice &&
+    product.previousPrice > product.price
       ? product.previousPrice - product.price
       : 0;
 
@@ -94,16 +96,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="mt-5 pt-4 border-t border-white/[0.06]">
         <div className="flex items-end justify-between gap-3">
           <div>
-            <span className="block text-xs text-[#94A3B8]">Desde</span>
+            <span className="block text-xs text-[#94A3B8]">
+              {product.price !== null ? (product.plans.length > 1 ? 'Desde' : 'Precio') : 'Tarifa'}
+            </span>
             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <span className="font-display text-xl font-bold text-[#F8FAFC] tabular-nums">
                 {formatPrice(product.price)}
               </span>
-              {product.previousPrice && product.previousPrice > product.price && (
-                <span className="text-xs text-[#94A3B8] line-through tabular-nums">
-                  {formatPrice(product.previousPrice)}
-                </span>
-              )}
+              {product.price !== null &&
+                product.previousPrice &&
+                product.previousPrice > product.price && (
+                  <span className="text-xs text-[#94A3B8] line-through tabular-nums">
+                    {formatPrice(product.previousPrice)}
+                  </span>
+                )}
               {savings > 0 && (
                 <span className="text-xs font-semibold text-[#10B981] tabular-nums">
                   Ahorras {formatPrice(savings)}

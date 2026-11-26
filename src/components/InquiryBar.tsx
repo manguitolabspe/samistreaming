@@ -41,7 +41,14 @@ export const InquiryBar: React.FC<InquiryBarProps> = ({
 
   if (items.length === 0) return null;
 
-  const total = items.reduce((sum, item) => sum + item.price, 0);
+  const total = items.reduce((sum, item) => sum + (item.price ?? 0), 0);
+  const hasConsult = items.some((item) => item.price === null);
+  const totalDisplay =
+    hasConsult && total === 0
+      ? 'Por cotizar'
+      : hasConsult
+        ? `${formatPrice(total)} + cotizar`
+        : formatPrice(total);
   const whatsappUrl = buildMultiInquiryWhatsAppUrl(items);
 
   return (
@@ -62,7 +69,7 @@ export const InquiryBar: React.FC<InquiryBarProps> = ({
                 {items.length} {items.length === 1 ? 'servicio' : 'servicios'} en consulta
               </p>
               <p className="text-xs text-[#94A3B8] tabular-nums flex items-center gap-1">
-                <span>Ref. {formatPrice(total)}</span>
+                <span>Ref. {totalDisplay}</span>
                 <span aria-hidden="true">·</span>
                 <span className="text-[#3B82F6] inline-flex items-center gap-0.5 font-medium">
                   Ver lista
@@ -159,7 +166,7 @@ export const InquiryBar: React.FC<InquiryBarProps> = ({
                   {items.length === 1 ? 'servicio' : 'servicios'})
                 </span>
                 <span className="font-display text-2xl font-extrabold text-[#F8FAFC] tabular-nums">
-                  {formatPrice(total)}
+                  {totalDisplay}
                 </span>
               </div>
 

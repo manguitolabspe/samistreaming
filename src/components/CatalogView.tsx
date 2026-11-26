@@ -4,6 +4,7 @@ import {
   CATEGORIES,
   CATEGORY_MAP,
   COMBOS,
+  IMPORTANT_NOTES,
   PRODUCTS,
   SOFTOPIA_PARTNER,
   type CategoryId,
@@ -57,8 +58,9 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       }
       if (sortMode === 'offers') {
         const hasDiscount =
-          Boolean(product.previousPrice && product.previousPrice > product.price) ||
-          Boolean(product.promoLabel);
+          Boolean(product.price !== null && product.previousPrice && product.previousPrice > product.price) ||
+          Boolean(product.promoLabel) ||
+          product.plans.some((pl) => pl.price !== null && pl.previousPrice && pl.previousPrice > pl.price);
         if (!hasDiscount) return false;
       }
       if (!q) return true;
@@ -72,10 +74,12 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
     });
 
     if (sortMode === 'priceAsc') {
-      return [...list].sort((a, b) => a.price - b.price);
+      return [...list].sort(
+        (a, b) => (a.price ?? Number.POSITIVE_INFINITY) - (b.price ?? Number.POSITIVE_INFINITY)
+      );
     }
     if (sortMode === 'priceDesc') {
-      return [...list].sort((a, b) => b.price - a.price);
+      return [...list].sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
     }
     return list;
   }, [selectedCategory, searchQuery, sortMode]);
@@ -347,6 +351,18 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           }}
         />
       )}
+      {/* Important Commercial Notes */}
+      <div className="rounded-2xl bg-[#0D1426] border border-white/[0.07] p-5">
+        <p className="font-display text-sm font-bold text-[#F8FAFC]">Información importante</p>
+        <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-[#94A3B8]">
+          {IMPORTANT_NOTES.map((note, idx) => (
+            <li key={idx} className="flex items-start gap-2">
+              <Check className="w-4 h-4 text-[#10B981] shrink-0 mt-0.5" />
+              <span>{note}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

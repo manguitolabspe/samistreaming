@@ -69,7 +69,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const isInInquiry = inquiryKeys.has(inquiryKey);
 
   const savings =
-    activePreviousPrice && activePreviousPrice > activePrice
+    activePrice !== null &&
+    activePreviousPrice &&
+    activePreviousPrice > activePrice
       ? activePreviousPrice - activePrice
       : 0;
 
@@ -82,7 +84,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleShare = async () => {
     const result = await shareOrCopyLink({
       title: `${product.name} — Sami Streaming`,
-      text: `Mira ${product.name} desde ${formatPrice(activePrice)} en Sami Streaming`,
+      text:
+        activePrice !== null
+          ? `Mira ${product.name} desde ${formatPrice(activePrice)} en Sami Streaming`
+          : `Mira ${product.name} disponible en Sami Streaming`,
       hash: `producto=${product.id}`,
     });
     if (result === 'copied') {
@@ -205,11 +210,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       <span className="font-display text-3xl font-extrabold text-[#F8FAFC] tabular-nums">
                         {formatPrice(activePrice)}
                       </span>
-                      {activePreviousPrice && activePreviousPrice > activePrice && (
-                        <span className="text-sm text-[#94A3B8] line-through tabular-nums">
-                          {formatPrice(activePreviousPrice)}
-                        </span>
-                      )}
+                      {activePrice !== null &&
+                        activePreviousPrice &&
+                        activePreviousPrice > activePrice && (
+                          <span className="text-sm text-[#94A3B8] line-through tabular-nums">
+                            {formatPrice(activePreviousPrice)}
+                          </span>
+                        )}
                       {savings > 0 && (
                         <span className="text-xs font-semibold text-[#10B981] tabular-nums">
                           Ahorras {formatPrice(savings)}
@@ -257,11 +264,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                               <span className="block font-display text-base font-bold text-[#F8FAFC] tabular-nums">
                                 {formatPrice(plan.price)}
                               </span>
-                              {plan.previousPrice && plan.previousPrice > plan.price && (
-                                <span className="block text-[11px] text-[#94A3B8] line-through tabular-nums">
-                                  {formatPrice(plan.previousPrice)}
-                                </span>
-                              )}
+                              {plan.price !== null &&
+                                plan.previousPrice &&
+                                plan.previousPrice > plan.price && (
+                                  <span className="block text-[11px] text-[#94A3B8] line-through tabular-nums">
+                                    {formatPrice(plan.previousPrice)}
+                                  </span>
+                                )}
                             </div>
                           </button>
                         );
