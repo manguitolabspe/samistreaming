@@ -1,0 +1,8 @@
+{
+  "name": "Sami Streaming",
+  "description": "Tu mundo digital, en un solo lugar. Catálogo digital de streaming, IPTV, software, antivirus, diseño e inteligencia artificial con atención directa por WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

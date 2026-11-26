@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0D1528"/>
+      <stop offset="100%" stop-color="#060A14"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="112" y1="112" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="256" y1="220" x2="400" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" stroke="#2563EB" stroke-opacity="0.28" stroke-width="6"/>
+  <!-- Stylized S + Play Wave Mark -->
+  <path d="M168 176C168 140 198 118 242 118H334C348 118 358 128 358 142C358 156 348 166 334 166H246C228 166 218 174 218 186C218 198 228 206 248 210L294 220C342 230 368 256 368 298C368 344 334 378 276 378H176C162 378 152 368 152 354C152 340 162 330 176 330H272C302 330 318 318 318 298C318 282 306 272 280 266L234 256C188 246 168 218 168 176Z" fill="url(#blueGrad)"/>
+  <polygon points="228,224 294,258 228,292" fill="url(#accentGrad)"/>
+</svg>
